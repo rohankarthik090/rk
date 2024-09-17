@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <fstream>  // For file handling
 
 #define PORT 12345  // Port to listen on
 
@@ -46,7 +47,15 @@ int main() {
         buffer[n] = '\0';  // Null-terminate the received data
         std::cout << "Received: " << buffer << "\n";
 
-        // You can now parse the received JSON data here
+        // Write the received JSON data to data.json
+        std::ofstream outfile("data.json");
+        if (outfile.is_open()) {
+            outfile << buffer;
+            outfile.close();
+            std::cout << "Data saved to data.json\n";
+        } else {
+            std::cerr << "Error opening file to write\n";
+        }
     }
 
     close(sockfd);
